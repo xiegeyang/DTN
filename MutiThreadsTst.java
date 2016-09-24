@@ -35,8 +35,9 @@ public class MutiThreadsTst {
 		goodNode6.getConnect(goodNode8);
 		goodNode7.getConnect(goodNode8);
 		goodNode7.getConnect(goodNode9);
-		goodNode9.getConnect(goodNode3);
+		//goodNode9.getConnect(goodNode3);
 		goodNode10.getConnect(goodNode1);
+		//goodNode4.disConnect(goodNode5);
 		
 		for(int i =0; i<vec.size() ;i++){
 			GoodNode goodNode = vec.elementAt(i);

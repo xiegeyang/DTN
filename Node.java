@@ -33,7 +33,16 @@ public abstract class Node {
 		//nodesGroup = new Vector<>();
 	}
 	
-	
+	public void disConnect(Node newNode){
+		if(newNode == null) return;
+		if(newNode.connectID != this.connectID){
+			return;
+		}
+		if(newNode.neighbors.contains(this)) newNode.neighbors.remove(this);
+		if(this.neighbors.contains(newNode)) this.neighbors.remove(newNode);
+		syncConnectID(this, this.label);
+		syncConnectID(newNode, newNode.label);
+	}
 	
 	public void getConnect(Node newNode){
 		if(newNode == null) return;
@@ -52,6 +61,16 @@ public abstract class Node {
 		origiNode.connectID = newNode.connectID;
 		for(int i = 0;i<origiNode.neighbors.size();i++){
 			syncConnectID(origiNode.neighbors.elementAt(i), newNode);
+		}
+		return;
+	}
+	
+	private void syncConnectID(Node origiNode, int connectedID){
+		if(origiNode == null || connectedID < 0) return;
+		if(origiNode.connectID == connectedID) return;
+		origiNode.connectID = connectedID;
+		for(int i = 0;i<origiNode.neighbors.size();i++){
+			syncConnectID(origiNode.neighbors.elementAt(i), connectedID);
 		}
 		return;
 	}
@@ -82,5 +101,9 @@ public abstract class Node {
 		if(msg == null ) return false;
 		this.msg = msg;
 		return true;
+	}
+	
+	public void forwardMsg(Message msg, Node nextNode){
+		
 	}
 }
