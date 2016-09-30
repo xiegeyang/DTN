@@ -5,7 +5,8 @@ import java.util.*;
 public class MutiThreadsTst {
 	public static void main(String[] args){
 		MutiThreadsTst test = new MutiThreadsTst();
-		test.MutiTreadsNodes();
+		//test.MutiTreadsNodes();
+		test.tstNodesManger();
 	}
 	
 	private void MutiTreadsNodes(){
@@ -37,7 +38,8 @@ public class MutiThreadsTst {
 		goodNode7.getConnect(goodNode9);
 		//goodNode9.getConnect(goodNode3);
 		goodNode10.getConnect(goodNode1);
-		//goodNode4.disConnect(goodNode5);
+		goodNode4.disConnect(goodNode5);
+		goodNode8.getConnect(goodNode9);
 		
 		for(int i =0; i<vec.size() ;i++){
 			GoodNode goodNode = vec.elementAt(i);
@@ -67,5 +69,11 @@ public class MutiThreadsTst {
 		for(int i =0;i<vec.size();i++ ){
 			new Thread(vec.elementAt(i)).start();
 		}
+	}
+	
+	public void tstNodesManger(){
+		//NodesManger ndsMg= new NodesManger(10,15);
+		NodesManger ndsMg= new NodesManger(10);
+		ndsMg.test();
 	}
 }

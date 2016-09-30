@@ -1,7 +1,7 @@
 package Geyang;
 
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.*;
+
 
 public class GoodNode_Runnable extends GoodNode implements Runnable{
 	public GoodNode_Runnable(int label) {

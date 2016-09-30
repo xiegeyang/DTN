@@ -8,7 +8,7 @@ public abstract class Node {
 	protected Message msg;
 	//protected HashMap<Node, Integer> frequency;
 	//protected HashMap<Node, HashMap<Node, Integer>> matrix;
-	protected static Vector<GoodNode_Runnable> nodesGroup = null;
+	protected static Vector<GoodNode_Runnable> nodesGroup;
 	protected int connectID;
 	
 	
