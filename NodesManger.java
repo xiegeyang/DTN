@@ -51,6 +51,18 @@ public class NodesManger {
 		makeConnection(lines);
 	}
 	
+	public NodesManger(int size, int lines, boolean isOneGroup){
+		setSize(size);
+		setLines(lines);
+		nodesGroup = new Vector<>();
+		for(int i =0; i<size; i++){
+			GoodNode_Runnable node = new GoodNode_Runnable(i, this.nodesGroup);
+		}
+		makeConnection(lines, isOneGroup);
+	}
+	
+	
+	
 	public void makeConnection(int lines){
 		System.out.println("The number of lines are : "+lines);
 		Random ran = new Random();
@@ -60,6 +72,21 @@ public class NodesManger {
 			if(nodeA != nodeB){
 				nodeA.getConnect(nodeB);
 			}
+		}
+	}
+	
+	public void makeConnection(int lines, boolean isOneGroup){
+		System.out.println("The number of lines are : "+lines);
+		Random ran = new Random();
+		for(int i =0;i<size-1;i++){
+			GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+			GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+			if(!nodeA.getConnect(nodeB, isOneGroup)) i--;
+		}
+		for(int i =0 ; i<lines-size+1;i++){
+			GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+			GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+			nodeA.getConnect(nodeB);
 		}
 	}
 	

@@ -72,8 +72,8 @@ public class MutiThreadsTst {
 	}
 	
 	public void tstNodesManger(){
-		//NodesManger ndsMg= new NodesManger(10,15);
-		NodesManger ndsMg= new NodesManger(10);
+		NodesManger ndsMg= new NodesManger(10,10,true);
+		//NodesManger ndsMg= new NodesManger(10);
 		ndsMg.test();
 	}
 }

@@ -35,6 +35,7 @@ public abstract class Node {
 	
 	public void disConnect(Node newNode){
 		if(newNode == null) return;
+		if(this == newNode) return;
 		if(newNode.connectID != this.connectID){
 			return;
 		}
@@ -46,6 +47,7 @@ public abstract class Node {
 	
 	public void getConnect(Node newNode){
 		if(newNode == null) return;
+		if(this == newNode) return;
 		if(newNode.connectID == this.connectID){
 			System.out.println("Warning! Node : " + label + " has already connected to the node : "
 					+ newNode.label);
@@ -53,6 +55,18 @@ public abstract class Node {
 		if(!this.neighbors.contains(newNode)) this.neighbors.add(newNode);
 		if(!newNode.neighbors.contains(this)) newNode.neighbors.add(this);
 		syncConnectID(this, newNode);
+	}
+	
+	public boolean getConnect(Node newNode, boolean isOneGroup){
+		if(newNode == null) return false;
+		if(newNode.connectID == this.connectID){
+			return false;
+		}
+		if(this == newNode) return false;
+		if(!this.neighbors.contains(newNode)) this.neighbors.add(newNode);
+		if(!newNode.neighbors.contains(this)) newNode.neighbors.add(this);
+		syncConnectID(this, newNode);
+		return true;
 	}
 	
 	private void syncConnectID(Node origiNode, Node newNode){
