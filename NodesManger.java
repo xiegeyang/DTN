@@ -33,7 +33,7 @@ public class NodesManger {
 		setSize(size);
 		nodesGroup = new Vector<>();
 		for(int i =0; i<size; i++){
-			GoodNode_Runnable node = new GoodNode_Runnable(i, this.nodesGroup);
+			GoodNode_Runnable node = new GoodNode_Runnable(i, this.nodesGroup, size);
 		}
 		Random ran = new Random();
 		this.lines = ran.nextInt(size * 2 - size) + size;
@@ -46,7 +46,7 @@ public class NodesManger {
 		setLines(lines);
 		nodesGroup = new Vector<>();
 		for(int i =0; i<size; i++){
-			GoodNode_Runnable node = new GoodNode_Runnable(i, this.nodesGroup);
+			GoodNode_Runnable node = new GoodNode_Runnable(i, this.nodesGroup, size);
 		}
 		makeConnection(lines);
 	}
@@ -56,7 +56,7 @@ public class NodesManger {
 		setLines(lines);
 		nodesGroup = new Vector<>();
 		for(int i =0; i<size; i++){
-			GoodNode_Runnable node = new GoodNode_Runnable(i, this.nodesGroup);
+			GoodNode_Runnable node = new GoodNode_Runnable(i, this.nodesGroup, size);
 		}
 		makeConnection(lines, isOneGroup);
 	}

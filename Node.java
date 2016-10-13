@@ -8,6 +8,7 @@ public abstract class Node {
 	protected Message msg;
 	//protected HashMap<Node, Integer> frequency;
 	//protected HashMap<Node, HashMap<Node, Integer>> matrix;
+	protected int matrix[][];
 	protected static Vector<GoodNode_Runnable> nodesGroup;
 	protected int connectID;
 	
@@ -93,11 +94,44 @@ public abstract class Node {
 		if(desNode == null){
 			return false;
 		}
-		if(isConnect(desNode)){
+		if(isConnect(desNode)&&sendMatrix(desNode)){
 			System.out.println("Node : " + label + ", sending message : " + this.msg 
 					+ ", to Node : " + desNode.label);
+			
 		}else{
 			return false;
+		}
+		return true;
+	}
+	
+	public boolean sendMatrix(Node desNode){
+		if(desNode == null){
+			return false;
+		}
+		if(!desNode.reseiveMatrix(this.matrix, this)) return false;
+		return true;
+	}
+	
+	private boolean reseiveMatrix(int[][] matrix, Node neighber){
+		if(matrix.length == 0) return false;
+		if(matrix[0].length == 0) return false;
+		System.out.println("Node : " + label + " has reseived matrix from node : " + neighber.label 
+				+ ", compare begins!! ");
+		if(!compare(matrix)) return false;
+		return true;
+	}
+	
+	private boolean compare(int[][] neiMatrix){
+		if(matrix.length == 0) return false;
+		if(matrix[0].length == 0) return false;
+		for(int i =0;i<matrix.length; i++){
+			for(int j =0;j<matrix[i].length;j++){
+				if(this.matrix[i][j] < neiMatrix[i][j]) {
+					System.out.println("Node : " + label + " has changed the matrix " + i + " " + j
+							+ " from " + matrix[i][j] + " to " + neiMatrix[i][j]);
+					this.matrix [i][j] = neiMatrix[i][j];
+				}	
+			}
 		}
 		return true;
 	}
@@ -115,6 +149,14 @@ public abstract class Node {
 		if(msg == null ) return false;
 		this.msg = msg;
 		return true;
+	}
+	
+	protected void randomMatrix(int[][] matrix){
+		for(int i =0;i<matrix.length;i++){
+			for(int j =0;j<matrix[0].length;j++){
+				matrix[i][j] = (int) (Math.random() * 50);
+			}
+		}
 	}
 	
 	public void forwardMsg(Message msg, Node nextNode){
