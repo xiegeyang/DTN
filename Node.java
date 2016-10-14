@@ -8,7 +8,7 @@ public abstract class Node {
 	protected Message msg;
 	//protected HashMap<Node, Integer> frequency;
 	//protected HashMap<Node, HashMap<Node, Integer>> matrix;
-	protected int matrix[][];
+	protected ContactHis matrix[][];
 	protected static Vector<GoodNode_Runnable> nodesGroup;
 	protected int connectID;
 	
@@ -44,11 +44,18 @@ public abstract class Node {
 		if(this.neighbors.contains(newNode)) this.neighbors.remove(newNode);
 		syncConnectID(this, this.label);
 		syncConnectID(newNode, newNode.label);
+		System.out.println("Node " + this.label +" disconnect with node " + newNode.label);
+		System.out.println("Connection ID of each node: ");
+		for(int i =0; i<nodesGroup.size() ;i++){
+			GoodNode goodNode = nodesGroup.elementAt(i);
+			System.out.println("Node " + nodesGroup.elementAt(i).label+ " : " + goodNode.connectID );
+		}
 	}
 	
 	public void getConnect(Node newNode){
 		if(newNode == null) return;
 		if(this == newNode) return;
+		if(this.neighbors.contains(newNode)) return;
 		if(newNode.connectID == this.connectID){
 			System.out.println("Warning! Node : " + label + " has already connected to the node : "
 					+ newNode.label);
@@ -56,17 +63,30 @@ public abstract class Node {
 		if(!this.neighbors.contains(newNode)) this.neighbors.add(newNode);
 		if(!newNode.neighbors.contains(this)) newNode.neighbors.add(this);
 		syncConnectID(this, newNode);
+		System.out.println("Node " + this.label +" connect with node " + newNode.label);
+		System.out.println("Connection ID of each node: ");
+		for(int i =0; i<nodesGroup.size() ;i++){
+			GoodNode goodNode = nodesGroup.elementAt(i);
+			System.out.println("Node " + nodesGroup.elementAt(i).label+ " : " + goodNode.connectID );
+		}
 	}
 	
 	public boolean getConnect(Node newNode, boolean isOneGroup){
 		if(newNode == null) return false;
-		if(newNode.connectID == this.connectID){
+		if(this.neighbors.contains(newNode)) return false;
+		if(isOneGroup && newNode.connectID == this.connectID){
 			return false;
 		}
 		if(this == newNode) return false;
 		if(!this.neighbors.contains(newNode)) this.neighbors.add(newNode);
 		if(!newNode.neighbors.contains(this)) newNode.neighbors.add(this);
 		syncConnectID(this, newNode);
+		System.out.println("Node " + this.label +" connect with node " + newNode.label);
+		System.out.println("Connection ID of each node: ");
+		for(int i =0; i<nodesGroup.size() ;i++){
+			GoodNode goodNode = nodesGroup.elementAt(i);
+			System.out.println("Node " + nodesGroup.elementAt(i).label+ " : " + goodNode.connectID );
+		}
 		return true;
 	}
 	
@@ -112,24 +132,24 @@ public abstract class Node {
 		return true;
 	}
 	
-	private boolean reseiveMatrix(int[][] matrix, Node neighber){
+	private boolean reseiveMatrix(ContactHis[][] matrix, Node neighber){
 		if(matrix.length == 0) return false;
 		if(matrix[0].length == 0) return false;
-		System.out.println("Node : " + label + " has reseived matrix from node : " + neighber.label 
-				+ ", compare begins!! ");
+		//System.out.println("Node : " + label + " has reseived matrix from node : " + neighber.label 
+		//		+ ", compare begins!! ");
 		if(!compare(matrix)) return false;
 		return true;
 	}
 	
-	private boolean compare(int[][] neiMatrix){
+	private boolean compare(ContactHis[][] neiMatrix){
 		if(matrix.length == 0) return false;
 		if(matrix[0].length == 0) return false;
 		for(int i =0;i<matrix.length; i++){
 			for(int j =0;j<matrix[i].length;j++){
-				if(this.matrix[i][j] < neiMatrix[i][j]) {
-					System.out.println("Node : " + label + " has changed the matrix " + i + " " + j
-							+ " from " + matrix[i][j] + " to " + neiMatrix[i][j]);
-					this.matrix [i][j] = neiMatrix[i][j];
+				if(this.matrix[i][j].getTimes() < neiMatrix[i][j].getTimes()) {
+					//System.out.println("Node : " + label + " has changed the matrix " + i + " " + j
+					//		+ " from " + matrix[i][j].getTimes() + " to " + neiMatrix[i][j].getTimes());
+					this.matrix[i][j].setTimes(neiMatrix[i][j].getTimes());
 				}	
 			}
 		}
@@ -151,10 +171,11 @@ public abstract class Node {
 		return true;
 	}
 	
-	protected void randomMatrix(int[][] matrix){
+	protected void randomMatrix(ContactHis[][] matrix){
 		for(int i =0;i<matrix.length;i++){
 			for(int j =0;j<matrix[0].length;j++){
-				matrix[i][j] = (int) (Math.random() * 50);
+				int temp = (int) (Math.random() * 50);
+				matrix[i][j] = new ContactHis(temp);
 			}
 		}
 	}

@@ -78,15 +78,25 @@ public class NodesManger {
 	public void makeConnection(int lines, boolean isOneGroup){
 		System.out.println("The number of lines are : "+lines);
 		Random ran = new Random();
-		for(int i =0;i<size-1;i++){
-			GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
-			GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
-			if(!nodeA.getConnect(nodeB, isOneGroup)) i--;
-		}
-		for(int i =0 ; i<lines-size+1;i++){
-			GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
-			GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
-			nodeA.getConnect(nodeB);
+		if(isOneGroup){
+			for(int i =0;i<size-1;i++){
+				GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+				GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+				if(!nodeA.getConnect(nodeB, isOneGroup)) i--;
+			}
+			for(int i =0 ; i<lines-size+1;i++){
+				GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+				GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+				if(!nodeA.getConnect(nodeB, false)) i--;
+			}
+		}else{
+			for(int i =0;i<lines;i++){
+				GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+				GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+				if(nodeA != nodeB){
+					nodeA.getConnect(nodeB);
+				}
+			}
 		}
 	}
 	

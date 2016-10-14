@@ -19,7 +19,7 @@ public class GoodNode_Runnable extends GoodNode implements Runnable{
 		this.connectID = label;
 		this.neighbors = new Vector<>();
 		GoodNode_Runnable.nodesGroup = vec;
-		this.matrix = new int[numOfNds][numOfNds];
+		this.matrix = new ContactHis[numOfNds][numOfNds];
 		randomMatrix(this.matrix);
 		nodesGroup.add(this);
 	}
@@ -28,23 +28,42 @@ public class GoodNode_Runnable extends GoodNode implements Runnable{
 		while(true){
 			try{
 				Thread.sleep((int)( Math.random() * 10000));
-				
+				if(!ChangeContact(10))
+					sendMessage(randomNeighbors());
 			}catch(Exception e){
 				 e.printStackTrace();
 			}
-			sendMessage(randomNeighbors());
+			
 		}
 	}
 	
 	private Node randomNode(){
 		int index = (int)(Math.random() * nodesGroup.size());
-		
 		return nodesGroup.elementAt(index) == this ? null: nodesGroup.elementAt(index);
 	}
 	
 	private Node randomNeighbors(){
+		if(this.neighbors.size()==0) return null;
 		int index = (int)(Math.random() * this.neighbors.size());
-		
 		return this.neighbors.elementAt(index) == this ? null: this.neighbors.elementAt(index);
+	}
+	
+	private boolean ChangeContact(int probability){
+		//probability from 0 - 100;
+		boolean isChanged = false;
+		if(probability <0) probability = 0;
+		if(probability >100) probability = 100;
+		int pro = (int)(Math.random() * 100);
+		if(pro <= probability ) {
+			this.disConnect(this.randomNeighbors());
+			isChanged = true;
+		}
+		pro = (int)(Math.random() * 100);
+		if(pro <= probability){
+			while(!this.getConnect(this.randomNode(), false))
+				this.getConnect(this.randomNode(), false);
+			isChanged = true;
+		}
+		return isChanged;
 	}
 }
