@@ -12,6 +12,7 @@ public class GoodNode_Runnable extends GoodNode implements Runnable{
 		this.connectID = label;
 		neighbors = new Vector<>();
 		GoodNode_Runnable.nodesGroup.add(this);
+		keyGeneration();
 	}
 	
 	public GoodNode_Runnable(int label, Vector<GoodNode_Runnable> vec, int numOfNds){
@@ -22,6 +23,7 @@ public class GoodNode_Runnable extends GoodNode implements Runnable{
 		this.matrix = new ContactHis[numOfNds][numOfNds];
 		randomMatrix(this.matrix);
 		nodesGroup.add(this);
+		keyGeneration();
 	}
 
 	public void run(){

@@ -1,6 +1,11 @@
 package Geyang;
+import java.io.Serializable;
 
-public class ContactHis {
+public class ContactHis implements Serializable {
+	/**
+	 * 
+	 */
+//	private static final long serialVersionUID = 1L;
 	private int times;
 
 	public int getTimes() {
@@ -14,4 +19,5 @@ public class ContactHis {
 	public ContactHis(int time){
 		this.times = time;
 	}
+	
 }

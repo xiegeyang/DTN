@@ -1,5 +1,7 @@
 package Geyang;
 
+
+import java.security.*;
 import java.util.*;
 
 public abstract class Node {
@@ -11,8 +13,15 @@ public abstract class Node {
 	protected ContactHis matrix[][];
 	protected static Vector<GoodNode_Runnable> nodesGroup;
 	protected int connectID;
+	protected KeyPair pair;
+	protected PrivateKey priv;
+	protected PublicKey pub;
+	protected HashMap<Node, PublicKey> keyMap = new HashMap<>();
 	
-	
+	public PublicKey getPub() {
+		return pub;
+	}
+
 	public void setMsg(Message msg){
 		if(msg == null) return;
 		encriptMsg(msg);
@@ -40,6 +49,8 @@ public abstract class Node {
 		if(newNode.connectID != this.connectID){
 			return;
 		}
+		if(this.keyMap.containsKey(newNode)) this.keyMap.remove(newNode);
+		if(newNode.keyMap.containsKey(this)) newNode.keyMap.remove(this);
 		if(newNode.neighbors.contains(this)) newNode.neighbors.remove(this);
 		if(this.neighbors.contains(newNode)) this.neighbors.remove(newNode);
 		syncConnectID(this, this.label);
@@ -60,6 +71,14 @@ public abstract class Node {
 			System.out.println("Warning! Node : " + label + " has already connected to the node : "
 					+ newNode.label);
 		}
+		if(!keyMap.containsKey(newNode)){
+			keyMap.put(newNode, newNode.getPub());
+			System.out.println("Node " + this.label + " got key from node :" + newNode.label + " , key is"  +keyMap.get(newNode).toString());
+		}
+		if(!newNode.keyMap.containsKey(this)){
+			newNode.keyMap.put(this, this.getPub());
+			System.out.println("Node " + newNode.label +" got key from node :" + this.label + " , key is"  +newNode.keyMap.get(this).toString());
+		}
 		if(!this.neighbors.contains(newNode)) this.neighbors.add(newNode);
 		if(!newNode.neighbors.contains(this)) newNode.neighbors.add(this);
 		syncConnectID(this, newNode);
@@ -78,6 +97,14 @@ public abstract class Node {
 			return false;
 		}
 		if(this == newNode) return false;
+		if(!keyMap.containsKey(newNode)){
+			keyMap.put(newNode, newNode.getPub());
+			System.out.println("Node " + this.label + " got key from node :" + newNode.label + " , key is"  +keyMap.get(newNode).toString());
+		}
+		if(!newNode.keyMap.containsKey(this)){
+			newNode.keyMap.put(this, this.getPub());
+			System.out.println("Node " + newNode.label +" got key from node " + this.label + " , key is "  +newNode.keyMap.get(this).toString());
+		}
 		if(!this.neighbors.contains(newNode)) this.neighbors.add(newNode);
 		if(!newNode.neighbors.contains(this)) newNode.neighbors.add(this);
 		syncConnectID(this, newNode);
@@ -135,8 +162,8 @@ public abstract class Node {
 	private boolean reseiveMatrix(ContactHis[][] matrix, Node neighber){
 		if(matrix.length == 0) return false;
 		if(matrix[0].length == 0) return false;
-		//System.out.println("Node : " + label + " has reseived matrix from node : " + neighber.label 
-		//		+ ", compare begins!! ");
+		System.out.println("Node : " + label + " has reseived matrix from node : " + neighber.label 
+				+ ", compare begins!! ");
 		if(!compare(matrix)) return false;
 		return true;
 	}
@@ -146,9 +173,10 @@ public abstract class Node {
 		if(matrix[0].length == 0) return false;
 		for(int i =0;i<matrix.length; i++){
 			for(int j =0;j<matrix[i].length;j++){
+				//ContactHis ch =  verifyContactHis()
 				if(this.matrix[i][j].getTimes() < neiMatrix[i][j].getTimes()) {
-					//System.out.println("Node : " + label + " has changed the matrix " + i + " " + j
-					//		+ " from " + matrix[i][j].getTimes() + " to " + neiMatrix[i][j].getTimes());
+					System.out.println("Node : " + label + " has changed the matrix " + i + " " + j
+							+ " from " + matrix[i][j].getTimes() + " to " + neiMatrix[i][j].getTimes());
 					this.matrix[i][j].setTimes(neiMatrix[i][j].getTimes());
 				}	
 			}
@@ -182,5 +210,54 @@ public abstract class Node {
 	
 	public void forwardMsg(Message msg, Node nextNode){
 		
+	}
+	protected void keyGeneration() {
+		try {
+			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
+			SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+			keyGen.initialize(1024, random);
+			
+			this.pair = keyGen.generateKeyPair();
+			this.priv = pair.getPrivate();
+			this.pub = pair.getPublic();
+	        } catch (Exception e) {
+	            System.err.println("Caught exception " + e.toString());
+	        }
+	}
+	protected SignedObject signContactHis(ContactHis history, PrivateKey key) {
+		if (history==null || key ==null) {
+			System.err.println("signContactHis error: history or private key can't be null");
+			return null;
+		}
+		SignedObject so = null;
+		try{
+			Signature signingEngine = Signature.getInstance("SHA-1/RSA");
+			so = new SignedObject(history, key, signingEngine);
+		} catch (Exception e) {
+			System.err.println("Caught exception " + e.toString());
+		}
+		return so;
+		
+	}
+	
+	public ContactHis verifyContactHis(SignedObject so, PublicKey pKey) {
+		if (so ==null || pKey == null) {
+			System.err.println("verifyContactHis error: so or public key can't be null");
+			return null;
+		}
+		ContactHis history = null;
+		try {
+			Signature verificationEngine =
+				     Signature.getInstance("SHA-1/RSA");
+				 if (so.verify(pKey, verificationEngine))
+				     try {
+				    	 history = (ContactHis) so.getObject();
+				     } catch (java.lang.ClassNotFoundException e) {
+				    	 System.err.println("Caught exception " + e.toString());
+				     };
+		} catch (Exception e) {
+			System.err.println("Caught exception " + e.toString());
+		}
+		return history;
 	}
 }
