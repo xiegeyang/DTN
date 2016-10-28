@@ -14,7 +14,7 @@ public class GoodNode_Runnable extends GoodNode implements Runnable{
 		GoodNode_Runnable.nodesGroup.add(this);
 	}
 	
-	public GoodNode_Runnable(int label, Vector<GoodNode_Runnable> vec, int numOfNds){
+	public GoodNode_Runnable(int label, Vector<Node> vec, int numOfNds){
 		this.label = label;
 		this.connectID = label;
 		this.neighbors = new Vector<>();

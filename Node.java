@@ -9,7 +9,7 @@ public abstract class Node {
 	//protected HashMap<Node, Integer> frequency;
 	//protected HashMap<Node, HashMap<Node, Integer>> matrix;
 	protected ContactHis matrix[][];
-	protected static Vector<GoodNode_Runnable> nodesGroup;
+	protected static Vector<Node> nodesGroup;
 	protected int connectID;
 	
 	
@@ -47,7 +47,7 @@ public abstract class Node {
 		System.out.println("Node " + this.label +" disconnect with node " + newNode.label);
 		System.out.println("Connection ID of each node: ");
 		for(int i =0; i<nodesGroup.size() ;i++){
-			GoodNode goodNode = nodesGroup.elementAt(i);
+			Node goodNode = nodesGroup.elementAt(i);
 			System.out.println("Node " + nodesGroup.elementAt(i).label+ " : " + goodNode.connectID );
 		}
 	}
@@ -66,7 +66,7 @@ public abstract class Node {
 		System.out.println("Node " + this.label +" connect with node " + newNode.label);
 		System.out.println("Connection ID of each node: ");
 		for(int i =0; i<nodesGroup.size() ;i++){
-			GoodNode goodNode = nodesGroup.elementAt(i);
+			Node goodNode = nodesGroup.elementAt(i);
 			System.out.println("Node " + nodesGroup.elementAt(i).label+ " : " + goodNode.connectID );
 		}
 	}
@@ -84,7 +84,7 @@ public abstract class Node {
 		System.out.println("Node " + this.label +" connect with node " + newNode.label);
 		System.out.println("Connection ID of each node: ");
 		for(int i =0; i<nodesGroup.size() ;i++){
-			GoodNode goodNode = nodesGroup.elementAt(i);
+			Node goodNode = nodesGroup.elementAt(i);
 			System.out.println("Node " + nodesGroup.elementAt(i).label+ " : " + goodNode.connectID );
 		}
 		return true;

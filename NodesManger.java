@@ -4,7 +4,7 @@ import java.util.*;
 
 public class NodesManger {
 	private int size;
-	private Vector<GoodNode_Runnable> nodesGroup;
+	private Vector<Node> nodesGroup;
 	private int lines;
 	
 	private void setSize(int size){
@@ -25,7 +25,7 @@ public class NodesManger {
 		this.lines = lines;
 	}
 	
-	public Vector<GoodNode_Runnable> getNodesGroup() {
+	public Vector<Node> getNodesGroup() {
 		return nodesGroup;
 	}
 
@@ -67,8 +67,8 @@ public class NodesManger {
 		System.out.println("The number of lines are : "+lines);
 		Random ran = new Random();
 		for(int i =0;i<lines;i++){
-			GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
-			GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+			Node nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+			Node nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
 			if(nodeA != nodeB){
 				nodeA.getConnect(nodeB);
 			}
@@ -80,19 +80,19 @@ public class NodesManger {
 		Random ran = new Random();
 		if(isOneGroup){
 			for(int i =0;i<size-1;i++){
-				GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
-				GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+				Node nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+				Node nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
 				if(!nodeA.getConnect(nodeB, isOneGroup)) i--;
 			}
 			for(int i =0 ; i<lines-size+1;i++){
-				GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
-				GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+				Node nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+				Node nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
 				if(!nodeA.getConnect(nodeB, false)) i--;
 			}
 		}else{
 			for(int i =0;i<lines;i++){
-				GoodNode_Runnable nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
-				GoodNode_Runnable nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
+				Node nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
+				Node nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
 				if(nodeA != nodeB){
 					nodeA.getConnect(nodeB);
 				}
@@ -102,7 +102,7 @@ public class NodesManger {
 	
 	public void test(){
 		for(int i =0; i<nodesGroup.size() ;i++){
-			GoodNode goodNode = nodesGroup.elementAt(i);
+			Node goodNode = nodesGroup.elementAt(i);
 			System.out.println(goodNode.label + " : ");
 			for(int j =0; j<goodNode.neighbors.size();j++){
 				System.out.print(goodNode.neighbors.elementAt(j).label +" ");
@@ -111,7 +111,7 @@ public class NodesManger {
 		}
 		System.out.println("Connection ID of each node: ");
 		for(int i =0; i<nodesGroup.size() ;i++){
-			GoodNode goodNode = nodesGroup.elementAt(i);
+			Node goodNode = nodesGroup.elementAt(i);
 			System.out.println("Node " + nodesGroup.elementAt(i).label+ " : " + goodNode.connectID );
 		}
 		System.out.println();
@@ -127,7 +127,7 @@ public class NodesManger {
 		}*/
 		
 		for(int i =0;i<nodesGroup.size();i++ ){
-			new Thread(nodesGroup.elementAt(i)).start();
+			new Thread((GoodNode_Runnable)nodesGroup.elementAt(i)).start();
 		}
 	}
 	
