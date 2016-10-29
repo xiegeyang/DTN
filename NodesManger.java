@@ -28,6 +28,10 @@ public class NodesManger {
 	public Vector<Node> getNodesGroup() {
 		return nodesGroup;
 	}
+	
+	public NodesManger(){
+		
+	}
 
 	public NodesManger(int size){
 		setSize(size);
@@ -37,7 +41,7 @@ public class NodesManger {
 		}
 		Random ran = new Random();
 		this.lines = ran.nextInt(size * 2 - size) + size;
-		makeConnection(lines);
+		makeConnection(lines,false);
 		
 	}
 	
@@ -48,7 +52,7 @@ public class NodesManger {
 		for(int i =0; i<size; i++){
 			GoodNode_Runnable node = new GoodNode_Runnable(i, this.nodesGroup, size);
 		}
-		makeConnection(lines);
+		makeConnection(lines,false);
 	}
 	
 	public NodesManger(int size, int lines, boolean isOneGroup){
@@ -63,17 +67,17 @@ public class NodesManger {
 	
 	
 	
-	public void makeConnection(int lines){
+	/*public void makeConnection(int lines){
 		System.out.println("The number of lines are : "+lines);
 		Random ran = new Random();
 		for(int i =0;i<lines;i++){
 			Node nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
 			Node nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
 			if(nodeA != nodeB){
-				nodeA.getConnect(nodeB);
+				nodeA.getConnect(nodeB, false);
 			}
 		}
-	}
+	}*/
 	
 	public void makeConnection(int lines, boolean isOneGroup){
 		System.out.println("The number of lines are : "+lines);
@@ -94,7 +98,7 @@ public class NodesManger {
 				Node nodeA = nodesGroup.elementAt(ran.nextInt(size)); 
 				Node nodeB = nodesGroup.elementAt(ran.nextInt(size)); 
 				if(nodeA != nodeB){
-					nodeA.getConnect(nodeB);
+					nodeA.getConnect(nodeB,false);
 				}
 			}
 		}
@@ -131,4 +135,12 @@ public class NodesManger {
 		}
 	}
 	
+	
+	public void testSignature(){
+		Node goodNode1 = new GoodNode_Runnable(1);
+		Node goodNode2 = new GoodNode_Runnable(2);
+		HistoryObj historyObj = new HistoryObj(1);
+		goodNode1.sign(historyObj);
+		System.out.println(goodNode2.verify(goodNode1, historyObj));
+	}
 }
